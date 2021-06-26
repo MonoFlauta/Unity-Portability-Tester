@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace UnityPortabilityTester
 {
+    [Serializable]
     [CreateAssetMenu(fileName = "UnityPortabilityTesterSettings", menuName = "Unity Portability Tester/Create Settings", order = 0)]
     public class UnityPortabilityTesterSettings : ScriptableObject
     {
