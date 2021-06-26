@@ -9,5 +9,13 @@ namespace UnityPortabilityTester
         public string[] externalResourcesPaths;
         [Header("Text Components Settings")]
         public bool checkText = true;
+        public bool checkTextMeshPro = true;
+        public bool checkImages = true;
+        public bool checkRawImages = true;
+        public bool checkButtons = true;
+        public bool checkToggles = true;
+        public bool checkSpriteSwap = true;
+        public bool checkDropdowns = true;
+        public bool checkInputFields = true;
     }
 }
