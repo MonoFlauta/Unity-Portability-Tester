@@ -37,9 +37,9 @@ namespace UnityPortabilityTester.Editor
         {
             foreach (var prefabsToTest in _prefabsData)
             {
-                for (var i = prefabsToTest.PrefabToTests.Length - 1; i >= 0; i--)
+                for (var i = prefabsToTest.prefabToTests.Length - 1; i >= 0; i--)
                 {
-                    CheckPortabilityFor(prefabsToTest.PrefabToTests[i]);
+                    CheckPortabilityFor(prefabsToTest.prefabToTests[i]);
                 }
             }
         }
@@ -67,24 +67,44 @@ namespace UnityPortabilityTester.Editor
             if (_settings.checkInputFields) CheckInputFieldComponentsFor(prefabToTest);
 
             if (_settings.checkPrefabs) CheckPrefabsFor(prefabToTest);
+
+            if (_settings.checkAnimators) CheckAnimatorComponentsFor(prefabToTest);
+        }
+
+        private void CheckAnimatorComponentsFor(PrefabToTest prefabToTest)
+        {
+            var animators = prefabToTest.prefab.GetComponentsInChildren<Animator>();
+            foreach (var animator in animators)
+            {
+                CheckPathFor<Animator>(animator.runtimeAnimatorController, prefabToTest);
+                CheckPathFor<Animator>(animator.avatar, prefabToTest);
+
+                CheckAnimatorController(animator.runtimeAnimatorController, prefabToTest);
+            }
+        }
+
+        private void CheckAnimatorController(RuntimeAnimatorController controller, PrefabToTest prefabToTest)
+        {
+            foreach (var clip in controller.animationClips)
+                CheckPathFor<AnimationClip>(clip, prefabToTest);
         }
 
         private void CheckPrefabsFor(PrefabToTest prefabToTest)
         {
-            var gameObjects = prefabToTest.Prefab.GetComponentsInChildren<Transform>().Select(x => x.gameObject);
+            var gameObjects = prefabToTest.prefab.GetComponentsInChildren<Transform>().Select(x => x.gameObject);
             foreach (var gameObject in gameObjects)
             {
                 if (!PrefabUtility.IsAnyPrefabInstanceRoot(gameObject)) continue;
                 var path = AssetDatabase.GetAssetPath(gameObject);
-                if (!string.IsNullOrEmpty(path) && (!path.Contains(prefabToTest.ConstraintPath) && !_settings.externalResourcesPaths.Any(x => path.Contains(x))))
-                    Assert.Fail("The prefab "+prefabToTest.Prefab.name+" at "+AssetDatabase.GetAssetPath(prefabToTest.Prefab)+" has a prefab outside the location."+
+                if (!string.IsNullOrEmpty(path) && (!path.Contains(prefabToTest.constraintPath) && !_settings.externalResourcesPaths.Any(x => path.Contains(x))))
+                    Assert.Fail("The prefab "+prefabToTest.prefab.name+" at "+AssetDatabase.GetAssetPath(prefabToTest.prefab)+" has a prefab outside the location."+
                                 Environment.NewLine+"The GameObject "+gameObject.name+" is located at "+path);
             }
         }
 
         private void CheckInputFieldComponentsFor(PrefabToTest prefabToTest)
         {
-            var inputFields = prefabToTest.Prefab.GetComponentsInChildren<InputField>();
+            var inputFields = prefabToTest.prefab.GetComponentsInChildren<InputField>();
             foreach (var inputField in inputFields)
             {
                 if (inputField.transition == Selectable.Transition.SpriteSwap)
@@ -99,7 +119,7 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckDropdownComponentsFor(PrefabToTest prefabToTest)
         {
-            var dropdowns = prefabToTest.Prefab.GetComponentsInChildren<Dropdown>();
+            var dropdowns = prefabToTest.prefab.GetComponentsInChildren<Dropdown>();
             foreach (var dropdown in dropdowns)
             {
                 if (dropdown.transition == Selectable.Transition.SpriteSwap)
@@ -114,7 +134,7 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckScrollBarComponentsFor(PrefabToTest prefabToTest)
         {
-            var scrollBars = prefabToTest.Prefab.GetComponentsInChildren<Scrollbar>();
+            var scrollBars = prefabToTest.prefab.GetComponentsInChildren<Scrollbar>();
             foreach (var scrollbar in scrollBars)
             {
                 if (scrollbar.transition == Selectable.Transition.SpriteSwap)
@@ -129,7 +149,7 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckToggleComponentsFor(PrefabToTest prefabToTest)
         {
-            var toggles = prefabToTest.Prefab.GetComponentsInChildren<Toggle>();
+            var toggles = prefabToTest.prefab.GetComponentsInChildren<Toggle>();
             foreach (var toggle in toggles)
             {
                 if (toggle.transition == Selectable.Transition.SpriteSwap)
@@ -144,7 +164,7 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckButtonComponentsFor(PrefabToTest prefabToTest)
         {
-            var buttons = prefabToTest.Prefab.GetComponentsInChildren<Button>();
+            var buttons = prefabToTest.prefab.GetComponentsInChildren<Button>();
             foreach (var button in buttons)
             {
                 if (button.transition == Selectable.Transition.SpriteSwap)
@@ -159,7 +179,7 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckRawImageComponentsFor(PrefabToTest prefabToTest)
         {
-            var images = prefabToTest.Prefab.GetComponentsInChildren<RawImage>();
+            var images = prefabToTest.prefab.GetComponentsInChildren<RawImage>();
             foreach (var image in images)
             {
                 CheckPathFor<RawImage>(image.texture, prefabToTest);
@@ -168,7 +188,7 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckImageComponentsFor(PrefabToTest prefabToTest)
         {
-            var images = prefabToTest.Prefab.GetComponentsInChildren<Image>();
+            var images = prefabToTest.prefab.GetComponentsInChildren<Image>();
             foreach (var image in images)
             {
                 CheckPathFor<Image>(image.sprite, prefabToTest);
@@ -177,7 +197,7 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckTextMeshProComponentsFor(PrefabToTest prefabToTest)
         {
-            var texts = prefabToTest.Prefab.GetComponentsInChildren<TextMeshProUGUI>();
+            var texts = prefabToTest.prefab.GetComponentsInChildren<TextMeshProUGUI>();
             foreach (var text in texts)
             {
                 CheckPathFor<TextMeshProUGUI>(text.font, prefabToTest);
@@ -186,7 +206,7 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckTextComponentsFor(PrefabToTest prefabToTest)
         {
-            var texts = prefabToTest.Prefab.GetComponentsInChildren<Text>();
+            var texts = prefabToTest.prefab.GetComponentsInChildren<Text>();
             foreach (var text in texts)
             {
                 CheckPathFor<Text>(text.font, prefabToTest);
@@ -196,9 +216,9 @@ namespace UnityPortabilityTester.Editor
         private void CheckPathFor<T>(Object asset, PrefabToTest prefabToTest)
         {
             if(asset != null 
-               && (string.IsNullOrEmpty(AssetDatabase.GetAssetPath(asset).Trim()) || !IsPathValid(AssetDatabase.GetAssetPath(asset), prefabToTest.ConstraintPath)))
-                Assert.Fail("The component "+typeof(T)+" inside prefab "+prefabToTest.Prefab.name+" that is located at "+AssetDatabase.GetAssetPath(prefabToTest.Prefab)+" has an external dependency." +
-                            Environment.NewLine+"The dependency is "+asset.name+" and it should be located inside "+prefabToTest.ConstraintPath+" or at a external resource path."+
+               && (string.IsNullOrEmpty(AssetDatabase.GetAssetPath(asset).Trim()) || !IsPathValid(AssetDatabase.GetAssetPath(asset), prefabToTest.constraintPath)))
+                Assert.Fail("The component "+typeof(T)+" inside prefab "+prefabToTest.prefab.name+" that is located at "+AssetDatabase.GetAssetPath(prefabToTest.prefab)+" has an external dependency." +
+                            Environment.NewLine+"The dependency is "+asset.name+" and it should be located inside "+prefabToTest.constraintPath+" or at a external resource path."+
                             Environment.NewLine+"The dependency is located at "+AssetDatabase.GetAssetPath(asset)+" for now");
         }
 
