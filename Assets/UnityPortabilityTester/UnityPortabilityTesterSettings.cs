@@ -21,6 +21,9 @@ namespace UnityPortabilityTester
         public bool checkInputFields = true;
         [Header("Prefab Settings")]
         public bool checkPrefabs = true;
+        [Header("2D")]
+        public bool checkSpriteRenderers = true;
+        public bool checkSpriteMasks = true;
         [Header("Others")]
         public bool checkAnimators = true;
     }

@@ -69,6 +69,30 @@ namespace UnityPortabilityTester.Editor
             if (_settings.checkPrefabs) CheckPrefabsFor(prefabToTest);
 
             if (_settings.checkAnimators) CheckAnimatorComponentsFor(prefabToTest);
+
+            if (_settings.checkSpriteRenderers) CheckSpriteRendererComponentsFor(prefabToTest);
+            if (_settings.checkSpriteMasks) CheckSpriteMaskComponentsFor(prefabToTest);
+        }
+
+        private void CheckSpriteMaskComponentsFor(PrefabToTest prefabToTest)
+        {
+            var spriteMasks = prefabToTest.prefab.GetComponentsInChildren<SpriteMask>();
+            foreach (var spriteMask in spriteMasks)
+            {
+                CheckPathFor<SpriteMask>(spriteMask.sprite, prefabToTest);
+            }
+        }
+
+        private void CheckSpriteRendererComponentsFor(PrefabToTest prefabToTest)
+        {
+            var spriteRenderers = prefabToTest.prefab.GetComponentsInChildren<SpriteRenderer>();
+            foreach (var spriteRenderer in spriteRenderers)
+            {
+                CheckPathFor<SpriteRenderer>(spriteRenderer.sprite, prefabToTest);
+                CheckPathFor<SpriteRenderer>(spriteRenderer.sharedMaterial, prefabToTest);
+                foreach (var sharedMaterial in spriteRenderer.sharedMaterials)
+                    CheckPathFor<SpriteRenderer>(sharedMaterial, prefabToTest);
+            }
         }
 
         private void CheckAnimatorComponentsFor(PrefabToTest prefabToTest)
@@ -78,7 +102,6 @@ namespace UnityPortabilityTester.Editor
             {
                 CheckPathFor<Animator>(animator.runtimeAnimatorController, prefabToTest);
                 CheckPathFor<Animator>(animator.avatar, prefabToTest);
-
                 CheckAnimatorController(animator.runtimeAnimatorController, prefabToTest);
             }
         }

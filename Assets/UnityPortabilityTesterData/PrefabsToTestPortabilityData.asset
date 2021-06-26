@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7237242d5514886aa2527a8642bab77, type: 3}
   m_Name: PrefabsToTestPortabilityData
   m_EditorClassIdentifier: 
-  PrefabToTests: []
+  prefabToTests: []
