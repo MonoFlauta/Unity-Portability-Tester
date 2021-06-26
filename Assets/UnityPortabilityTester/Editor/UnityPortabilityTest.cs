@@ -59,7 +59,7 @@ namespace UnityPortabilityTester.Editor
             if (_settings.checkRawImages) CheckRawImageComponentsFor(prefabToTest);
             if (_settings.checkButtons) CheckButtonComponentsFor(prefabToTest);
             if (_settings.checkToggles) CheckToggleComponentsFor(prefabToTest);
-            if (_settings.checkSpriteSwap) CheckSpriteSwapComponentsFor(prefabToTest);
+            if (_settings.checkSpriteSwap) CheckScrollBarComponentsFor(prefabToTest);
             if (_settings.checkDropdowns) CheckDropdownComponentsFor(prefabToTest);
             if (_settings.checkInputFields) CheckInputFieldComponentsFor(prefabToTest);
 
@@ -73,9 +73,7 @@ namespace UnityPortabilityTester.Editor
             {
                 if (!PrefabUtility.IsAnyPrefabInstanceRoot(gameObject)) continue;
                 var path = AssetDatabase.GetAssetPath(gameObject);
-                if (!string.IsNullOrEmpty(path) 
-                    && !path.Contains(prefabToTest.constraintPath) 
-                    && !_settings.externalResourcesPaths.Any(x => path.Contains(x)))
+                if (!string.IsNullOrEmpty(path) && (!path.Contains(prefabToTest.constraintPath) && !_settings.externalResourcesPaths.Any(x => path.Contains(x))))
                     Assert.Fail("The prefab "+prefabToTest.prefab.name+" at "+AssetDatabase.GetAssetPath(prefabToTest.prefab)+" has a prefab outside the location."+
                                 Environment.NewLine+"The GameObject "+gameObject.name+" is located at "+path);
             }
@@ -111,7 +109,7 @@ namespace UnityPortabilityTester.Editor
             }
         }
 
-        private void CheckSpriteSwapComponentsFor(PrefabToTest prefabToTest)
+        private void CheckScrollBarComponentsFor(PrefabToTest prefabToTest)
         {
             var scrollBars = prefabToTest.prefab.GetComponentsInChildren<Scrollbar>();
             foreach (var scrollbar in scrollBars)

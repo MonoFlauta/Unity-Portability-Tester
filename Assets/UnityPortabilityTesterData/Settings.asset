@@ -13,5 +13,14 @@ MonoBehaviour:
   m_Name: Settings
   m_EditorClassIdentifier: 
   externalResourcesPaths:
-  - Library/
+  - Library/unity
   checkText: 1
+  checkTextMeshPro: 1
+  checkImages: 1
+  checkRawImages: 1
+  checkButtons: 1
+  checkToggles: 1
+  checkSpriteSwap: 1
+  checkDropdowns: 1
+  checkInputFields: 1
+  checkPrefabs: 1
