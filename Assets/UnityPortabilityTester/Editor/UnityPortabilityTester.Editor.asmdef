@@ -1,0 +1,17 @@
+{
+    "name": "UnityPortabilityTester.Editor",
+    "references": [
+        "GUID:39b50c61395f6734abbad7f12f24966c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
