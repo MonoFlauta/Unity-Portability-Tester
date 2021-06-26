@@ -62,6 +62,23 @@ namespace UnityPortabilityTester.Editor
             if (_settings.checkSpriteSwap) CheckSpriteSwapComponentsFor(prefabToTest);
             if (_settings.checkDropdowns) CheckDropdownComponentsFor(prefabToTest);
             if (_settings.checkInputFields) CheckInputFieldComponentsFor(prefabToTest);
+
+            if (_settings.checkPrefabs) CheckPrefabsFor(prefabToTest);
+        }
+
+        private void CheckPrefabsFor(PrefabToTest prefabToTest)
+        {
+            var gameObjects = prefabToTest.prefab.GetComponentsInChildren<Transform>().Select(x => x.gameObject);
+            foreach (var gameObject in gameObjects)
+            {
+                if (!PrefabUtility.IsAnyPrefabInstanceRoot(gameObject)) continue;
+                var path = AssetDatabase.GetAssetPath(gameObject);
+                if (!string.IsNullOrEmpty(path) 
+                    && !path.Contains(prefabToTest.constraintPath) 
+                    && !_settings.externalResourcesPaths.Any(x => path.Contains(x)))
+                    Assert.Fail("The prefab "+prefabToTest.prefab.name+" at "+AssetDatabase.GetAssetPath(prefabToTest.prefab)+" has a prefab outside the location."+
+                                Environment.NewLine+"The GameObject "+gameObject.name+" is located at "+path);
+            }
         }
 
         private void CheckInputFieldComponentsFor(PrefabToTest prefabToTest)

@@ -7,7 +7,7 @@ namespace UnityPortabilityTester
     {
         [Header("General Settings")] 
         public string[] externalResourcesPaths;
-        [Header("Text Components Settings")]
+        [Header("UI Settings")]
         public bool checkText = true;
         public bool checkTextMeshPro = true;
         public bool checkImages = true;
@@ -17,5 +17,7 @@ namespace UnityPortabilityTester
         public bool checkSpriteSwap = true;
         public bool checkDropdowns = true;
         public bool checkInputFields = true;
+        [Header("Prefab Settings")]
+        public bool checkPrefabs = true;
     }
 }
