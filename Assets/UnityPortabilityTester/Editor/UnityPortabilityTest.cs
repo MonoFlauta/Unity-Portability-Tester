@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
@@ -18,7 +19,7 @@ namespace UnityPortabilityTester.Editor
         private const string SettingsFileName = "Settings.asset";
 
         private UnityPortabilityTesterSettings _settings;
-        private PrefabsToTestPortabilityData _prefabsToTest;
+        private PrefabsToTestPortabilityData[] _prefabsData;
 
         [SetUp]
         public void SetUp()
@@ -26,18 +27,20 @@ namespace UnityPortabilityTester.Editor
             _settings = AssetDatabase.LoadAssetAtPath<UnityPortabilityTesterSettings>(SettingsFilePath);
             if (_settings == null)
                 _settings = CreateScriptableObjectOf<UnityPortabilityTesterSettings>(SettingsFilePath);
-            
-            _prefabsToTest = AssetDatabase.LoadAssetAtPath<PrefabsToTestPortabilityData>(PrefabsToTestFilePath);
-            if (_prefabsToTest == null)
-                _prefabsToTest = CreateScriptableObjectOf<PrefabsToTestPortabilityData>(PrefabsToTestFilePath);
+
+
+            _prefabsData = FindAssetsByType<PrefabsToTestPortabilityData>();
         }
 
         [Test]
         public void CheckPortabilityOnPrefabs()
         {
-            for (var i = _prefabsToTest.PrefabToTests.Length - 1; i >= 0; i--)
+            foreach (var prefabsToTest in _prefabsData)
             {
-                CheckPortabilityFor(_prefabsToTest.PrefabToTests[i]);
+                for (var i = prefabsToTest.PrefabToTests.Length - 1; i >= 0; i--)
+                {
+                    CheckPortabilityFor(prefabsToTest.PrefabToTests[i]);
+                }
             }
         }
 
@@ -202,6 +205,22 @@ namespace UnityPortabilityTester.Editor
         private bool IsPathValid(string path, string constraintPath) 
             => path.Contains(constraintPath) || _settings.externalResourcesPaths.Any(path.Contains);
 
+        private T[] FindAssetsByType<T>() where T : Object
+        {
+            var assets = new List<T>();
+            var guids = AssetDatabase.FindAssets($"t:{typeof(T)}");
+            foreach (var t in guids)
+            {
+                var assetPath = AssetDatabase.GUIDToAssetPath( t );
+                var asset = AssetDatabase.LoadAssetAtPath<T>( assetPath );
+                if( asset != null )
+                {
+                    assets.Add(asset);
+                }
+            }
+            return assets.ToArray();
+        }
+        
         private static string FolderPath => AssetsPath+FolderName+"/";
         private static string SettingsFilePath => FolderPath+SettingsFileName;
         private static string PrefabsToTestFilePath => FolderPath+PrefabsToTestFileName;
