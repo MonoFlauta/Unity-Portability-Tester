@@ -57,7 +57,7 @@ namespace UnityPortabilityTester.Editor
             for (var i = _data.prefabToTests.Length - 1; i >= 0; i--)
             {
                 if(_data.prefabToTests[i] == null)
-                    _data.prefabToTests[i] = new PrefabToTest();
+                    _data.prefabToTests[i] = new PrefabToTest(null, "");
             }
         }
 

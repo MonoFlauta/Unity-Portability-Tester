@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace UnityPortabilityTester
 {
@@ -7,12 +6,5 @@ namespace UnityPortabilityTester
     public class PrefabsToTestPortabilityData : ScriptableObject
     {
         public PrefabToTest[] prefabToTests = new PrefabToTest[0];
-    }
-    
-    [Serializable]
-    public class PrefabToTest
-    {
-        public GameObject prefab;
-        public string constraintPath;
     }
 }

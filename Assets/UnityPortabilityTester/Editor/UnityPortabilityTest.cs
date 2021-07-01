@@ -19,7 +19,6 @@ namespace UnityPortabilityTester.Editor
         private const string SettingsFileName = "Settings.asset";
 
         private UnityPortabilityTesterSettings _settings;
-        private PrefabsToTestPortabilityData[] _prefabsData;
 
         [SetUp]
         public void SetUp()
@@ -27,20 +26,37 @@ namespace UnityPortabilityTester.Editor
             _settings = AssetDatabase.LoadAssetAtPath<UnityPortabilityTesterSettings>(SettingsFilePath);
             if (_settings == null)
                 _settings = CreateScriptableObjectOf<UnityPortabilityTesterSettings>(SettingsFilePath);
-
-
-            _prefabsData = FindAssetsByType<PrefabsToTestPortabilityData>();
         }
 
         [Test]
         public void CheckPortabilityOnPrefabs()
         {
-            foreach (var prefabsToTest in _prefabsData)
+            var prefabsData = FindAssetsByType<PrefabsToTestPortabilityData>();
+            
+            foreach (var prefabsToTest in prefabsData)
             {
                 for (var i = prefabsToTest.prefabToTests.Length - 1; i >= 0; i--)
                 {
                     CheckPortabilityFor(prefabsToTest.prefabToTests[i]);
                 }
+            }
+        }
+
+        [Test]
+        public void CheckPortabilityOnPrefabsByFolder()
+        {
+            var folderPathsDatas = FindAssetsByType<FoldersOfPrefabsToTestPortabilityData>();
+
+            foreach (var folderPathData in folderPathsDatas)
+            {
+                 var prefabToTests = AssetDatabase.GetAllAssetPaths()
+                    .Where(assetPath => folderPathData.paths.Any(assetPath.Contains))
+                    .Select(path => new Tuple<Object, string>(AssetDatabase.LoadAssetAtPath<Object>(path), path))
+                    .Where(t => t.Item1 is GameObject)
+                    .Select(t => new PrefabToTest((GameObject)t.Item1, t.Item2)).ToList();
+
+                 foreach (var prefabToTest in prefabToTests) 
+                     CheckPortabilityFor(prefabToTest);
             }
         }
 
