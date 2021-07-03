@@ -73,7 +73,7 @@ namespace UnityPortabilityTester.Editor
         private void CheckPortabilityFor(PrefabToTest prefabToTest)
         {
             if (_settings.checkText) CheckTextComponentsFor(prefabToTest);
-            if (_settings.checkTextMeshPro) CheckTextMeshProComponentsFor(prefabToTest);
+            if (_settings.checkTextMeshProUI) CheckTextMeshProUIComponentsFor(prefabToTest);
             if (_settings.checkImages) CheckImageComponentsFor(prefabToTest);
             if (_settings.checkRawImages) CheckRawImageComponentsFor(prefabToTest);
             if (_settings.checkButtons) CheckButtonComponentsFor(prefabToTest);
@@ -93,6 +93,17 @@ namespace UnityPortabilityTester.Editor
             if (_settings.checkMeshFilter) CheckMeshFilterComponentsFor(prefabToTest);
             if (_settings.checkMeshRenderer) CheckMeshRendererComponentsFor(prefabToTest);
             if (_settings.checkColliders) CheckCollidersComponentsFor(prefabToTest);
+            if (_settings.checkTextMeshPro) CheckTextMeshProComponentsFor(prefabToTest);
+        }
+
+        private void CheckTextMeshProComponentsFor(PrefabToTest prefabToTest)
+        {
+            var textMeshes = prefabToTest.prefab.GetComponentsInChildren<TextMeshPro>();
+            foreach (var textMesh in textMeshes)
+            {
+                CheckPathFor<TextMeshPro>(textMesh.mesh, prefabToTest);
+                CheckPathFor<TextMeshPro>(textMesh.font, prefabToTest);
+            }
         }
 
         private void CheckColliders2DComponentsFor(PrefabToTest prefabToTest)
@@ -283,7 +294,7 @@ namespace UnityPortabilityTester.Editor
             }
         }
 
-        private void CheckTextMeshProComponentsFor(PrefabToTest prefabToTest)
+        private void CheckTextMeshProUIComponentsFor(PrefabToTest prefabToTest)
         {
             var texts = prefabToTest.prefab.GetComponentsInChildren<TextMeshProUGUI>();
             foreach (var text in texts)

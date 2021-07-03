@@ -11,7 +11,7 @@ namespace UnityPortabilityTester
         public string[] externalResourcesPaths;
         [Header("UI Settings")]
         public bool checkText = true;
-        public bool checkTextMeshPro = true;
+        public bool checkTextMeshProUI = true;
         public bool checkImages = true;
         public bool checkRawImages = true;
         public bool checkButtons = true;
@@ -29,6 +29,7 @@ namespace UnityPortabilityTester
         public bool checkMeshFilter = true;
         public bool checkMeshRenderer = true;
         public bool checkColliders = true;
+        public bool checkTextMeshPro = true;
         [Header("Others")]
         public bool checkAnimators = true;
     }
