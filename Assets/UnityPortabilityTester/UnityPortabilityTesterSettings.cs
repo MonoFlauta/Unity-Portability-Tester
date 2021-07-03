@@ -26,8 +26,9 @@ namespace UnityPortabilityTester
         public bool checkSpriteMasks = true;
         [Header("3D")]
         public bool checkMeshFilter = true;
+        public bool checkMeshRenderer = true;
+        public bool checkColliders = true;
         [Header("Others")]
         public bool checkAnimators = true;
-
     }
 }
