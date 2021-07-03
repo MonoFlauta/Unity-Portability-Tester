@@ -88,10 +88,20 @@ namespace UnityPortabilityTester.Editor
 
             if (_settings.checkSpriteRenderers) CheckSpriteRendererComponentsFor(prefabToTest);
             if (_settings.checkSpriteMasks) CheckSpriteMaskComponentsFor(prefabToTest);
+            if (_settings.checkCollider2D) CheckColliders2DComponentsFor(prefabToTest);
 
             if (_settings.checkMeshFilter) CheckMeshFilterComponentsFor(prefabToTest);
             if (_settings.checkMeshRenderer) CheckMeshRendererComponentsFor(prefabToTest);
             if (_settings.checkColliders) CheckCollidersComponentsFor(prefabToTest);
+        }
+
+        private void CheckColliders2DComponentsFor(PrefabToTest prefabToTest)
+        {
+            var colliders = prefabToTest.prefab.GetComponentsInChildren<Collider2D>();
+            foreach (var collider in colliders)
+            {
+                CheckPathFor<Collider2D>(collider.sharedMaterial, prefabToTest);
+            }
         }
 
         private void CheckCollidersComponentsFor(PrefabToTest prefabToTest)
