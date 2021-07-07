@@ -2,10 +2,8 @@
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
-using TMPro;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace UnityPortabilityTester.Editor
