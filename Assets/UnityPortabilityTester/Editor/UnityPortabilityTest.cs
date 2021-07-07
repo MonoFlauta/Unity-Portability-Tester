@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
@@ -15,7 +14,6 @@ namespace UnityPortabilityTester.Editor
     {
         private const string AssetsPath = "Assets/";
         private const string FolderName = "UnityPortabilityTesterData";
-        private const string PrefabsToTestFileName = "PrefabsToTestPortabilityData.asset";
         private const string SettingsFileName = "Settings.asset";
 
         private UnityPortabilityTesterSettings _settings;
@@ -31,23 +29,15 @@ namespace UnityPortabilityTester.Editor
         [Test]
         public void CheckPortabilityOnPrefabs()
         {
-            var prefabsData = FindAssetsByType<PrefabsToTestPortabilityData>();
-            
-            foreach (var prefabsToTest in prefabsData)
-            {
+            foreach (var prefabsToTest in FindAssetsByType<PrefabsToTestPortabilityData>())
                 for (var i = prefabsToTest.prefabToTests.Length - 1; i >= 0; i--)
-                {
                     CheckPortabilityFor(prefabsToTest.prefabToTests[i]);
-                }
-            }
         }
 
         [Test]
         public void CheckPortabilityOnPrefabsByFolder()
         {
-            var folderPathsDatas = FindAssetsByType<FoldersOfPrefabsToTestPortabilityData>();
-
-            foreach (var folderPathData in folderPathsDatas)
+            foreach (var folderPathData in FindAssetsByType<FoldersOfPrefabsToTestPortabilityData>())
             {
                  var prefabToTests = AssetDatabase.GetAllAssetPaths()
                     .Where(assetPath => folderPathData.paths.Any(assetPath.Contains))
@@ -98,8 +88,7 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckTextMeshProComponentsFor(PrefabToTest prefabToTest)
         {
-            var textMeshes = prefabToTest.prefab.GetComponentsInChildren<TextMeshPro>();
-            foreach (var textMesh in textMeshes)
+            foreach (var textMesh in prefabToTest.prefab.GetComponentsInChildren<TextMeshPro>())
             {
                 CheckPathFor<TextMeshPro>(textMesh.mesh, prefabToTest);
                 CheckPathFor<TextMeshPro>(textMesh.font, prefabToTest);
@@ -108,8 +97,7 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckColliders2DComponentsFor(PrefabToTest prefabToTest)
         {
-            var colliders = prefabToTest.prefab.GetComponentsInChildren<Collider2D>();
-            foreach (var collider in colliders)
+            foreach (var collider in prefabToTest.prefab.GetComponentsInChildren<Collider2D>())
             {
                 CheckPathFor<Collider2D>(collider.sharedMaterial, prefabToTest);
             }
@@ -117,8 +105,7 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckCollidersComponentsFor(PrefabToTest prefabToTest)
         {
-            var colliders = prefabToTest.prefab.GetComponentsInChildren<Collider>();
-            foreach (var collider in colliders)
+            foreach (var collider in prefabToTest.prefab.GetComponentsInChildren<Collider>())
             {
                 CheckPathFor<Collider>(collider.material, prefabToTest);
                 CheckPathFor<Collider>(collider.sharedMaterial, prefabToTest);
@@ -127,8 +114,7 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckMeshRendererComponentsFor(PrefabToTest prefabToTest)
         {
-            var meshRenderers = prefabToTest.prefab.GetComponentsInChildren<MeshRenderer>();
-            foreach (var meshRenderer in meshRenderers)
+            foreach (var meshRenderer in prefabToTest.prefab.GetComponentsInChildren<MeshRenderer>())
             {
                 CheckPathFor<MeshRenderer>(meshRenderer.material, prefabToTest);
                 CheckPathFor<MeshRenderer>(meshRenderer.sharedMaterial, prefabToTest);
@@ -142,8 +128,7 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckMeshFilterComponentsFor(PrefabToTest prefabToTest)
         {
-            var meshFilters = prefabToTest.prefab.GetComponentsInChildren<MeshFilter>();
-            foreach (var meshFilter in meshFilters)
+            foreach (var meshFilter in prefabToTest.prefab.GetComponentsInChildren<MeshFilter>())
             {
                 CheckPathFor<MeshFilter>(meshFilter.mesh, prefabToTest);
                 CheckPathFor<MeshFilter>(meshFilter.sharedMesh, prefabToTest);
@@ -152,17 +137,13 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckSpriteMaskComponentsFor(PrefabToTest prefabToTest)
         {
-            var spriteMasks = prefabToTest.prefab.GetComponentsInChildren<SpriteMask>();
-            foreach (var spriteMask in spriteMasks)
-            {
+            foreach (var spriteMask in prefabToTest.prefab.GetComponentsInChildren<SpriteMask>())
                 CheckPathFor<SpriteMask>(spriteMask.sprite, prefabToTest);
-            }
         }
 
         private void CheckSpriteRendererComponentsFor(PrefabToTest prefabToTest)
         {
-            var spriteRenderers = prefabToTest.prefab.GetComponentsInChildren<SpriteRenderer>();
-            foreach (var spriteRenderer in spriteRenderers)
+            foreach (var spriteRenderer in prefabToTest.prefab.GetComponentsInChildren<SpriteRenderer>())
             {
                 CheckPathFor<SpriteRenderer>(spriteRenderer.sprite, prefabToTest);
                 CheckPathFor<SpriteRenderer>(spriteRenderer.sharedMaterial, prefabToTest);
@@ -173,8 +154,7 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckAnimatorComponentsFor(PrefabToTest prefabToTest)
         {
-            var animators = prefabToTest.prefab.GetComponentsInChildren<Animator>();
-            foreach (var animator in animators)
+            foreach (var animator in prefabToTest.prefab.GetComponentsInChildren<Animator>())
             {
                 CheckPathFor<Animator>(animator.runtimeAnimatorController, prefabToTest);
                 CheckPathFor<Animator>(animator.avatar, prefabToTest);
@@ -190,8 +170,7 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckPrefabsFor(PrefabToTest prefabToTest)
         {
-            var gameObjects = prefabToTest.prefab.GetComponentsInChildren<Transform>().Select(x => x.gameObject);
-            foreach (var gameObject in gameObjects)
+            foreach (var gameObject in prefabToTest.prefab.GetComponentsInChildren<Transform>().Select(x => x.gameObject))
             {
                 if (!PrefabUtility.IsAnyPrefabInstanceRoot(gameObject)) continue;
                 var path = AssetDatabase.GetAssetPath(gameObject);
@@ -203,113 +182,86 @@ namespace UnityPortabilityTester.Editor
 
         private void CheckInputFieldComponentsFor(PrefabToTest prefabToTest)
         {
-            var inputFields = prefabToTest.prefab.GetComponentsInChildren<InputField>();
-            foreach (var inputField in inputFields)
+            foreach (var inputField in prefabToTest.prefab.GetComponentsInChildren<InputField>())
             {
-                if (inputField.transition == Selectable.Transition.SpriteSwap)
-                {
-                    CheckPathFor<InputField>(inputField.spriteState.highlightedSprite, prefabToTest);
-                    CheckPathFor<InputField>(inputField.spriteState.pressedSprite, prefabToTest);
-                    CheckPathFor<InputField>(inputField.spriteState.selectedSprite, prefabToTest);
-                    CheckPathFor<InputField>(inputField.spriteState.disabledSprite, prefabToTest);
-                }
+                if (inputField.transition != Selectable.Transition.SpriteSwap) continue;
+                CheckPathFor<InputField>(inputField.spriteState.highlightedSprite, prefabToTest);
+                CheckPathFor<InputField>(inputField.spriteState.pressedSprite, prefabToTest);
+                CheckPathFor<InputField>(inputField.spriteState.selectedSprite, prefabToTest);
+                CheckPathFor<InputField>(inputField.spriteState.disabledSprite, prefabToTest);
             }
         }
 
         private void CheckDropdownComponentsFor(PrefabToTest prefabToTest)
         {
-            var dropdowns = prefabToTest.prefab.GetComponentsInChildren<Dropdown>();
-            foreach (var dropdown in dropdowns)
+            foreach (var dropdown in prefabToTest.prefab.GetComponentsInChildren<Dropdown>())
             {
-                if (dropdown.transition == Selectable.Transition.SpriteSwap)
-                {
-                    CheckPathFor<Dropdown>(dropdown.spriteState.highlightedSprite, prefabToTest);
-                    CheckPathFor<Dropdown>(dropdown.spriteState.pressedSprite, prefabToTest);
-                    CheckPathFor<Dropdown>(dropdown.spriteState.selectedSprite, prefabToTest);
-                    CheckPathFor<Dropdown>(dropdown.spriteState.disabledSprite, prefabToTest);
-                }
+                if (dropdown.transition != Selectable.Transition.SpriteSwap) continue;
+                CheckPathFor<Dropdown>(dropdown.spriteState.highlightedSprite, prefabToTest);
+                CheckPathFor<Dropdown>(dropdown.spriteState.pressedSprite, prefabToTest);
+                CheckPathFor<Dropdown>(dropdown.spriteState.selectedSprite, prefabToTest);
+                CheckPathFor<Dropdown>(dropdown.spriteState.disabledSprite, prefabToTest);
             }
         }
 
         private void CheckScrollBarComponentsFor(PrefabToTest prefabToTest)
         {
-            var scrollBars = prefabToTest.prefab.GetComponentsInChildren<Scrollbar>();
-            foreach (var scrollbar in scrollBars)
+            foreach (var scrollbar in prefabToTest.prefab.GetComponentsInChildren<Scrollbar>())
             {
-                if (scrollbar.transition == Selectable.Transition.SpriteSwap)
-                {
-                    CheckPathFor<Scrollbar>(scrollbar.spriteState.highlightedSprite, prefabToTest);
-                    CheckPathFor<Scrollbar>(scrollbar.spriteState.pressedSprite, prefabToTest);
-                    CheckPathFor<Scrollbar>(scrollbar.spriteState.selectedSprite, prefabToTest);
-                    CheckPathFor<Scrollbar>(scrollbar.spriteState.disabledSprite, prefabToTest);
-                }
+                if (scrollbar.transition != Selectable.Transition.SpriteSwap) continue;
+                CheckPathFor<Scrollbar>(scrollbar.spriteState.highlightedSprite, prefabToTest);
+                CheckPathFor<Scrollbar>(scrollbar.spriteState.pressedSprite, prefabToTest);
+                CheckPathFor<Scrollbar>(scrollbar.spriteState.selectedSprite, prefabToTest);
+                CheckPathFor<Scrollbar>(scrollbar.spriteState.disabledSprite, prefabToTest);
             }
         }
 
         private void CheckToggleComponentsFor(PrefabToTest prefabToTest)
         {
-            var toggles = prefabToTest.prefab.GetComponentsInChildren<Toggle>();
-            foreach (var toggle in toggles)
+            foreach (var toggle in prefabToTest.prefab.GetComponentsInChildren<Toggle>())
             {
-                if (toggle.transition == Selectable.Transition.SpriteSwap)
-                {
-                    CheckPathFor<Toggle>(toggle.spriteState.highlightedSprite, prefabToTest);
-                    CheckPathFor<Toggle>(toggle.spriteState.pressedSprite, prefabToTest);
-                    CheckPathFor<Toggle>(toggle.spriteState.selectedSprite, prefabToTest);
-                    CheckPathFor<Toggle>(toggle.spriteState.disabledSprite, prefabToTest);
-                }
+                if (toggle.transition != Selectable.Transition.SpriteSwap) continue;
+                CheckPathFor<Toggle>(toggle.spriteState.highlightedSprite, prefabToTest);
+                CheckPathFor<Toggle>(toggle.spriteState.pressedSprite, prefabToTest);
+                CheckPathFor<Toggle>(toggle.spriteState.selectedSprite, prefabToTest);
+                CheckPathFor<Toggle>(toggle.spriteState.disabledSprite, prefabToTest);
             }
         }
 
         private void CheckButtonComponentsFor(PrefabToTest prefabToTest)
         {
-            var buttons = prefabToTest.prefab.GetComponentsInChildren<Button>();
-            foreach (var button in buttons)
+            foreach (var button in prefabToTest.prefab.GetComponentsInChildren<Button>())
             {
-                if (button.transition == Selectable.Transition.SpriteSwap)
-                {
-                    CheckPathFor<Button>(button.spriteState.highlightedSprite, prefabToTest);
-                    CheckPathFor<Button>(button.spriteState.pressedSprite, prefabToTest);
-                    CheckPathFor<Button>(button.spriteState.selectedSprite, prefabToTest);
-                    CheckPathFor<Button>(button.spriteState.disabledSprite, prefabToTest);
-                }
+                if (button.transition != Selectable.Transition.SpriteSwap) continue;
+                CheckPathFor<Button>(button.spriteState.highlightedSprite, prefabToTest);
+                CheckPathFor<Button>(button.spriteState.pressedSprite, prefabToTest);
+                CheckPathFor<Button>(button.spriteState.selectedSprite, prefabToTest);
+                CheckPathFor<Button>(button.spriteState.disabledSprite, prefabToTest);
             }
         }
 
         private void CheckRawImageComponentsFor(PrefabToTest prefabToTest)
         {
-            var images = prefabToTest.prefab.GetComponentsInChildren<RawImage>();
-            foreach (var image in images)
-            {
+            foreach (var image in prefabToTest.prefab.GetComponentsInChildren<RawImage>())
                 CheckPathFor<RawImage>(image.texture, prefabToTest);
-            }
         }
 
         private void CheckImageComponentsFor(PrefabToTest prefabToTest)
         {
-            var images = prefabToTest.prefab.GetComponentsInChildren<Image>();
-            foreach (var image in images)
-            {
+            foreach (var image in prefabToTest.prefab.GetComponentsInChildren<Image>())
                 CheckPathFor<Image>(image.sprite, prefabToTest);
-            }
         }
 
         private void CheckTextMeshProUIComponentsFor(PrefabToTest prefabToTest)
         {
-            var texts = prefabToTest.prefab.GetComponentsInChildren<TextMeshProUGUI>();
-            foreach (var text in texts)
-            {
+            foreach (var text in prefabToTest.prefab.GetComponentsInChildren<TextMeshProUGUI>())
                 CheckPathFor<TextMeshProUGUI>(text.font, prefabToTest);
-            }
         }
 
         private void CheckTextComponentsFor(PrefabToTest prefabToTest)
         {
-            var texts = prefabToTest.prefab.GetComponentsInChildren<Text>();
-            foreach (var text in texts)
-            {
+            foreach (var text in prefabToTest.prefab.GetComponentsInChildren<Text>())
                 CheckPathFor<Text>(text.font, prefabToTest);
-            }
         }
 
         private void CheckPathFor<T>(Object asset, PrefabToTest prefabToTest)
@@ -324,24 +276,14 @@ namespace UnityPortabilityTester.Editor
         private bool IsPathValid(string path, string constraintPath) 
             => path.Contains(constraintPath) || _settings.externalResourcesPaths.Any(path.Contains);
 
-        private T[] FindAssetsByType<T>() where T : Object
-        {
-            var assets = new List<T>();
-            var guids = AssetDatabase.FindAssets($"t:{typeof(T)}");
-            foreach (var t in guids)
-            {
-                var assetPath = AssetDatabase.GUIDToAssetPath( t );
-                var asset = AssetDatabase.LoadAssetAtPath<T>( assetPath );
-                if( asset != null )
-                {
-                    assets.Add(asset);
-                }
-            }
-            return assets.ToArray();
-        }
-        
+        private T[] FindAssetsByType<T>() where T : Object =>
+            AssetDatabase.FindAssets($"t:{typeof(T)}")
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Select(AssetDatabase.LoadAssetAtPath<T>)
+                .Where(asset => asset != null)
+                .ToArray();
+
         private static string FolderPath => AssetsPath+FolderName+"/";
         private static string SettingsFilePath => FolderPath+SettingsFileName;
-        private static string PrefabsToTestFilePath => FolderPath+PrefabsToTestFileName;
     }
 }
