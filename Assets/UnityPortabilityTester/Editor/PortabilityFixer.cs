@@ -111,11 +111,17 @@ namespace UnityPortabilityTester.Editor
             _portabilityChecker.CheckPortabilityFor(new PrefabToTest(_prefabToTest, _constraintPath));
         }
 
-        private void OnComponentFail(Object asset, PrefabToTest testedPrefab, Type assetType) => 
-            _outsideObjects.Add(asset);
+        private void OnComponentFail(Object asset, PrefabToTest testedPrefab, Type assetType)
+        {
+            if(!_outsideObjects.Contains(asset))
+                _outsideObjects.Add(asset);
+        }
 
-        private void OnPrefabFail(PrefabToTest testedPrefab, GameObject outsideGameObject, string pathOfGameObject) => 
-            _outsideObjects.Add(outsideGameObject);
+        private void OnPrefabFail(PrefabToTest testedPrefab, GameObject outsideGameObject, string pathOfGameObject)
+        {
+            if(!_outsideObjects.Contains(outsideGameObject))
+                _outsideObjects.Add(outsideGameObject);
+        }
 
         private static string FolderPath => AssetsPath+FolderName+"/";
         private static string SettingsFilePath => FolderPath+SettingsFileName;
