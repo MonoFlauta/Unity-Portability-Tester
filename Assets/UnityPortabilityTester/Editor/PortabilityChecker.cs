@@ -121,9 +121,12 @@ namespace UnityPortabilityTester.Editor
         {
             foreach (var animator in prefabToTest.prefab.GetComponentsInChildren<Animator>())
             {
-                CheckPathFor(animator.runtimeAnimatorController, prefabToTest, typeof(Animator));
+                if (animator.runtimeAnimatorController != null)
+                {
+                    CheckPathFor(animator.runtimeAnimatorController, prefabToTest, typeof(Animator));
+                    CheckAnimatorController(animator.runtimeAnimatorController, prefabToTest);
+                }
                 CheckPathFor(animator.avatar, prefabToTest, typeof(Animator));
-                CheckAnimatorController(animator.runtimeAnimatorController, prefabToTest);
             }
         }
 
